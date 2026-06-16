@@ -52,32 +52,3 @@ public class ResultsViewModel : ViewModelBase
         StatusMessage = $"Alert saved! You'll be notified if {flight.Origin}→{flight.Destination} drops below {flight.Price:F2} {flight.Currency}.";
     }
 }
-
-// Generic async relay command for parameterized actions
-public class AsyncRelayCommand<T> : ICommand
-{
-    private readonly Func<T?, Task> _execute;
-    private bool _isExecuting;
-
-    public AsyncRelayCommand(Func<T?, Task> execute) => _execute = execute;
-
-    public event EventHandler? CanExecuteChanged
-    {
-        add => System.Windows.Input.CommandManager.RequerySuggested += value;
-        remove => System.Windows.Input.CommandManager.RequerySuggested -= value;
-    }
-
-    public bool CanExecute(object? parameter) => !_isExecuting;
-
-    public async void Execute(object? parameter)
-    {
-        _isExecuting = true;
-        System.Windows.Input.CommandManager.InvalidateRequerySuggested();
-        try { await _execute(parameter is T t ? t : default); }
-        finally
-        {
-            _isExecuting = false;
-            System.Windows.Input.CommandManager.InvalidateRequerySuggested();
-        }
-    }
-}

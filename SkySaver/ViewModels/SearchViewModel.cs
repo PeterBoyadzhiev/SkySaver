@@ -44,7 +44,7 @@ public class SearchViewModel : ViewModelBase
     public bool IsLoading
     {
         get => _isLoading;
-        set => SetProperty(ref _isLoading, value);
+        set { if (SetProperty(ref _isLoading, value)) OnPropertyChanged(nameof(CanSearch)); }
     }
 
     public string ErrorMessage
@@ -84,7 +84,7 @@ public class SearchViewModel : ViewModelBase
             SearchCompleted?.Invoke(Results);
 
             if (Results.Count == 0)
-                ErrorMessage = "No flights found for this route. Try SOF → LHR, TXL, CDG, FCO, or AMS.";
+                ErrorMessage = "No flights found. Supported routes: SOF↔LHR, SOF↔TXL, SOF↔CDG, SOF↔FCO, SOF↔AMS, SOF↔MXP.";
         }
         catch (HttpRequestException ex)
         {
