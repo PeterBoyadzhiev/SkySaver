@@ -5,7 +5,7 @@ using SkySaver.Models;
 
 namespace SkySaver.Services;
 
-public class AmadeusFlightSearchService : IFlightSearchService
+public class AmadeusFlightSearchService : IFlightService
 {
     private readonly HttpClient _http;
     private readonly string _clientId;
@@ -23,15 +23,15 @@ public class AmadeusFlightSearchService : IFlightSearchService
         _clientSecret = clientSecret;
     }
 
-    public async Task<IEnumerable<Flight>> SearchFlightsAsync(SearchQuery query)
+    public async Task<IEnumerable<Flight>> SearchFlightsAsync(string origin, string destination, DateTime date)
     {
         await EnsureTokenAsync();
 
         var url = $"https://test.api.amadeus.com/v2/shopping/flight-offers" +
-                  $"?originLocationCode={Uri.EscapeDataString(query.Origin.ToUpper())}" +
-                  $"&destinationLocationCode={Uri.EscapeDataString(query.Destination.ToUpper())}" +
-                  $"&departureDate={query.DepartureDate:yyyy-MM-dd}" +
-                  $"&adults={query.Adults}" +
+                  $"?originLocationCode={Uri.EscapeDataString(origin.ToUpper())}" +
+                  $"&destinationLocationCode={Uri.EscapeDataString(destination.ToUpper())}" +
+                  $"&departureDate={date:yyyy-MM-dd}" +
+                  $"&adults=1" +
                   $"&max=10" +
                   $"&currencyCode=EUR";
 
@@ -49,12 +49,7 @@ public class AmadeusFlightSearchService : IFlightSearchService
 
     public async Task<decimal?> GetLowestPriceAsync(string origin, string destination, DateTime date)
     {
-        var flights = await SearchFlightsAsync(new SearchQuery
-        {
-            Origin = origin,
-            Destination = destination,
-            DepartureDate = date,
-        });
+        var flights = await SearchFlightsAsync(origin, destination, date);
         var list = flights.ToList();
         return list.Count == 0 ? null : list.Min(f => f.Price);
     }

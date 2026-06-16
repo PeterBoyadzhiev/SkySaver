@@ -10,11 +10,13 @@ public class MainViewModel : ViewModelBase
     public MainViewModel(
         SearchViewModel searchVm,
         ResultsViewModel resultsVm,
-        AlertsViewModel alertsVm)
+        AlertsViewModel alertsVm,
+        SettingsViewModel settingsVm)
     {
-        SearchVm = searchVm;
-        ResultsVm = resultsVm;
-        AlertsVm = alertsVm;
+        SearchVm   = searchVm;
+        ResultsVm  = resultsVm;
+        AlertsVm   = alertsVm;
+        SettingsVm = settingsVm;
 
         _currentView = SearchVm;
 
@@ -24,18 +26,20 @@ public class MainViewModel : ViewModelBase
             CurrentView = ResultsVm;
         };
 
-        NavigateSearchCommand  = new RelayCommand(() => CurrentView = SearchVm);
-        NavigateResultsCommand = new RelayCommand(() => CurrentView = ResultsVm);
-        NavigateAlertsCommand  = new RelayCommand(async () =>
+        NavigateSearchCommand   = new RelayCommand(() => CurrentView = SearchVm);
+        NavigateResultsCommand  = new RelayCommand(() => CurrentView = ResultsVm);
+        NavigateAlertsCommand   = new RelayCommand(async () =>
         {
             CurrentView = AlertsVm;
             await ((AsyncRelayCommand)AlertsVm.LoadCommand).ExecuteAsync();
         });
+        NavigateSettingsCommand = new RelayCommand(() => CurrentView = SettingsVm);
     }
 
-    public SearchViewModel  SearchVm  { get; }
-    public ResultsViewModel ResultsVm { get; }
-    public AlertsViewModel  AlertsVm  { get; }
+    public SearchViewModel   SearchVm   { get; }
+    public ResultsViewModel  ResultsVm  { get; }
+    public AlertsViewModel   AlertsVm   { get; }
+    public SettingsViewModel SettingsVm { get; }
 
     public object CurrentView
     {
@@ -43,7 +47,8 @@ public class MainViewModel : ViewModelBase
         set => SetProperty(ref _currentView, value);
     }
 
-    public ICommand NavigateSearchCommand  { get; }
-    public ICommand NavigateResultsCommand { get; }
-    public ICommand NavigateAlertsCommand  { get; }
+    public ICommand NavigateSearchCommand   { get; }
+    public ICommand NavigateResultsCommand  { get; }
+    public ICommand NavigateAlertsCommand   { get; }
+    public ICommand NavigateSettingsCommand { get; }
 }

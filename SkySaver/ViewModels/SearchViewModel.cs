@@ -9,7 +9,7 @@ namespace SkySaver.ViewModels;
 
 public class SearchViewModel : ViewModelBase
 {
-    private readonly IFlightSearchService _flightService;
+    private readonly IFlightServiceFactory _factory;
 
     private string _origin = string.Empty;
     private string _destination = string.Empty;
@@ -17,9 +17,9 @@ public class SearchViewModel : ViewModelBase
     private bool _isLoading;
     private string _errorMessage = string.Empty;
 
-    public SearchViewModel(IFlightSearchService flightService)
+    public SearchViewModel(IFlightServiceFactory factory)
     {
-        _flightService = flightService;
+        _factory = factory;
         SearchCommand = new AsyncRelayCommand(SearchAsync, () => CanSearch);
     }
 
@@ -50,7 +50,7 @@ public class SearchViewModel : ViewModelBase
     public string ErrorMessage
     {
         get => _errorMessage;
-        set => SetProperty(ref _errorMessage, value);
+        set { SetProperty(ref _errorMessage, value); OnPropertyChanged(nameof(HasError)); }
     }
 
     public bool HasError => !string.IsNullOrEmpty(ErrorMessage);
@@ -75,21 +75,16 @@ public class SearchViewModel : ViewModelBase
 
         try
         {
-            var query = new SearchQuery
-            {
-                Origin = Origin,
-                Destination = Destination,
-                DepartureDate = DepartureDate,
-            };
+            var service = _factory.Create();
+            var flights = await service.SearchFlightsAsync(Origin, Destination, DepartureDate);
 
-            var flights = await _flightService.SearchFlightsAsync(query);
             foreach (var f in flights)
                 Results.Add(f);
 
             SearchCompleted?.Invoke(Results);
 
             if (Results.Count == 0)
-                ErrorMessage = "No flights found for this route and date.";
+                ErrorMessage = "No flights found for this route. Try SOF → LHR, TXL, CDG, FCO, or AMS.";
         }
         catch (HttpRequestException ex)
         {

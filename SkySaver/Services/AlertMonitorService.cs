@@ -5,21 +5,21 @@ namespace SkySaver.Services;
 public class AlertMonitorService
 {
     private readonly IPriceAlertRepository _repo;
-    private readonly IFlightSearchService _flightService;
+    private readonly IFlightServiceFactory _factory;
     private readonly INotificationService _notifier;
     private readonly PeriodicTimer _timer;
     private CancellationTokenSource? _cts;
 
     public AlertMonitorService(
         IPriceAlertRepository repo,
-        IFlightSearchService flightService,
+        IFlightServiceFactory factory,
         INotificationService notifier,
         TimeSpan? interval = null)
     {
-        _repo = repo;
-        _flightService = flightService;
+        _repo    = repo;
+        _factory = factory;
         _notifier = notifier;
-        _timer = new PeriodicTimer(interval ?? TimeSpan.FromMinutes(30));
+        _timer   = new PeriodicTimer(interval ?? TimeSpan.FromMinutes(30));
     }
 
     public void Start()
@@ -32,7 +32,6 @@ public class AlertMonitorService
 
     private async Task RunLoopAsync(CancellationToken ct)
     {
-        // Run once immediately on start, then on each tick
         await CheckAllAlertsAsync();
         try
         {
@@ -49,7 +48,8 @@ public class AlertMonitorService
         {
             try
             {
-                var price = await _flightService.GetLowestPriceAsync(alert.Origin, alert.Destination, alert.DepartureDate);
+                var service = _factory.Create();
+                var price = await service.GetLowestPriceAsync(alert.Origin, alert.Destination, alert.DepartureDate);
                 if (price == null) continue;
 
                 alert.LastCheckedPrice = price;

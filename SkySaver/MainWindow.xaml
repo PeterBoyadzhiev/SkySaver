@@ -19,6 +19,9 @@
         <DataTemplate DataType="{x:Type vm:AlertsViewModel}">
             <views:AlertsView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
+            <views:SettingsView/>
+        </DataTemplate>
     </Window.Resources>
 
     <Grid>
@@ -50,13 +53,16 @@
                     <Button Content="🔔   Price Alerts"
                             Command="{Binding NavigateAlertsCommand}"
                             Style="{StaticResource NavButtonStyle}" Margin="0,2,0,0"/>
+                    <Button Content="⚙   Settings"
+                            Command="{Binding NavigateSettingsCommand}"
+                            Style="{StaticResource NavButtonStyle}" Margin="0,2,0,0"/>
                 </StackPanel>
 
-                <!-- Footer -->
+                <!-- Mode indicator footer -->
                 <TextBlock DockPanel.Dock="Bottom" Margin="20,0,20,16"
-                           Text="Powered by Amadeus API"
-                           Foreground="#D1D5DB" FontSize="10"
-                           VerticalAlignment="Bottom"/>
+                           Text="{Binding SettingsVm.ModeLabel}"
+                           Foreground="#9CA3AF" FontSize="10"
+                           VerticalAlignment="Bottom" TextWrapping="Wrap"/>
             </DockPanel>
         </Border>
 
