@@ -1,0 +1,68 @@
+<Window x:Class="SkySaver.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:views="clr-namespace:SkySaver.Views"
+        xmlns:vm="clr-namespace:SkySaver.ViewModels"
+        Title="SkySaver — Flight Deal Tracker"
+        Height="680" Width="1000"
+        MinHeight="580" MinWidth="820"
+        WindowStartupLocation="CenterScreen"
+        Background="#F8FAFC">
+
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type vm:SearchViewModel}">
+            <views:SearchView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ResultsViewModel}">
+            <views:ResultsView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:AlertsViewModel}">
+            <views:AlertsView/>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Sidebar -->
+        <Border Grid.Column="0" Background="White"
+                BorderBrush="#E5E7EB" BorderThickness="0,0,1,0">
+            <DockPanel>
+                <!-- Brand -->
+                <StackPanel DockPanel.Dock="Top" Margin="20,28,20,32">
+                    <TextBlock Text="✈ SkySaver" FontSize="20" FontWeight="Bold"
+                               Foreground="#1A1A2E"/>
+                    <TextBlock Text="Flight Deal Tracker" FontSize="11"
+                               Foreground="#9CA3AF" Margin="0,3,0,0"/>
+                </StackPanel>
+
+                <!-- Nav -->
+                <StackPanel DockPanel.Dock="Top" Margin="12,0">
+                    <Button Content="🔍   Search Flights"
+                            Command="{Binding NavigateSearchCommand}"
+                            Style="{StaticResource NavButtonStyle}"/>
+                    <Button Content="📋   Results"
+                            Command="{Binding NavigateResultsCommand}"
+                            Style="{StaticResource NavButtonStyle}" Margin="0,2,0,0"/>
+                    <Button Content="🔔   Price Alerts"
+                            Command="{Binding NavigateAlertsCommand}"
+                            Style="{StaticResource NavButtonStyle}" Margin="0,2,0,0"/>
+                </StackPanel>
+
+                <!-- Footer -->
+                <TextBlock DockPanel.Dock="Bottom" Margin="20,0,20,16"
+                           Text="Powered by Amadeus API"
+                           Foreground="#D1D5DB" FontSize="10"
+                           VerticalAlignment="Bottom"/>
+            </DockPanel>
+        </Border>
+
+        <!-- Content area -->
+        <ContentControl Grid.Column="1"
+                        Content="{Binding CurrentView}"
+                        Margin="0"/>
+    </Grid>
+</Window>

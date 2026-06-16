@@ -1,0 +1,16 @@
+# Build outputs
+bin/
+obj/
+*.user
+
+# DB file
+*.db
+
+# VS / Rider artifacts
+.vs/
+.idea/
+*.suo
+*.sln.docstates
+
+# User secrets / credentials
+appsettings.local.json

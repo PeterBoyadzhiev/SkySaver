@@ -1,0 +1,93 @@
+<UserControl x:Class="SkySaver.Views.SearchView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             Background="Transparent">
+
+    <Grid MaxWidth="520" Margin="40">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,32">
+            <TextBlock Text="Find Flights" FontSize="28" FontWeight="Bold"
+                       Foreground="#1A1A2E"/>
+            <TextBlock Text="Search and track the best deals" FontSize="14"
+                       Foreground="#6B7280" Margin="0,4,0,0"/>
+        </StackPanel>
+
+        <!-- Search Card -->
+        <Border Grid.Row="1" Background="White" CornerRadius="16"
+                Padding="32" Effect="{StaticResource CardShadow}">
+            <StackPanel>
+
+                <!-- Origin / Destination -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="40"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="FROM" Style="{StaticResource LabelStyle}"/>
+                        <TextBox Text="{Binding Origin, UpdateSourceTrigger=PropertyChanged}"
+                                 Style="{StaticResource InputStyle}"
+                                 MaxLength="3" CharacterCasing="Upper"
+                                 Tag="e.g. LHR"/>
+                    </StackPanel>
+
+                    <TextBlock Grid.Column="1" Text="✈" FontSize="20"
+                               HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                               Margin="0,0,0,8" Foreground="#6366F1"/>
+
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="TO" Style="{StaticResource LabelStyle}"/>
+                        <TextBox Text="{Binding Destination, UpdateSourceTrigger=PropertyChanged}"
+                                 Style="{StaticResource InputStyle}"
+                                 MaxLength="3" CharacterCasing="Upper"
+                                 Tag="e.g. CDG"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Date -->
+                <StackPanel Margin="0,20,0,0">
+                    <TextBlock Text="DEPARTURE DATE" Style="{StaticResource LabelStyle}"/>
+                    <DatePicker SelectedDate="{Binding DepartureDate}"
+                                DisplayDateStart="{Binding Source={x:Static sys:DateTime.Today}}"
+                                Style="{StaticResource DatePickerStyle}"/>
+                </StackPanel>
+
+                <!-- Search Button -->
+                <Button Content="Search Flights"
+                        Command="{Binding SearchCommand}"
+                        Style="{StaticResource PrimaryButtonStyle}"
+                        Margin="0,24,0,0"/>
+
+                <!-- Loading -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
+                            Margin="0,16,0,0"
+                            Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <ProgressBar IsIndeterminate="True" Width="180" Height="4"
+                                 Foreground="#6366F1"/>
+                    <TextBlock Text="  Searching…" Foreground="#6B7280" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- Error -->
+                <Border Background="#FEF2F2" CornerRadius="8" Padding="12" Margin="0,12,0,0"
+                        Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <TextBlock Text="{Binding ErrorMessage}" Foreground="#DC2626" TextWrapping="Wrap"/>
+                </Border>
+
+            </StackPanel>
+        </Border>
+
+        <!-- Tip -->
+        <TextBlock Grid.Row="2" Margin="0,16,0,0"
+                   Text="💡 Enter 3-letter IATA codes (e.g. LHR, JFK, SOF)"
+                   Foreground="#9CA3AF" FontSize="12" HorizontalAlignment="Center"/>
+    </Grid>
+</UserControl>

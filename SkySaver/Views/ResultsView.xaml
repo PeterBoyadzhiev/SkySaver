@@ -1,0 +1,93 @@
+<UserControl x:Class="SkySaver.Views.ResultsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="Transparent">
+
+    <Grid Margin="40">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,16">
+            <TextBlock Text="Search Results" FontSize="28" FontWeight="Bold"
+                       Foreground="#1A1A2E"/>
+            <TextBlock Text="{Binding Flights.Count, StringFormat='{}{0} flights found'}"
+                       FontSize="14" Foreground="#6B7280" Margin="0,4,0,0"/>
+        </StackPanel>
+
+        <!-- Status message (after saving alert) -->
+        <Border Grid.Row="1" Background="#EEF2FF" CornerRadius="8" Padding="12" Margin="0,0,0,12"
+                Visibility="{Binding StatusMessage, Converter={StaticResource StringToVisibilityConverter}}">
+            <TextBlock Text="{Binding StatusMessage}" Foreground="#4338CA" TextWrapping="Wrap"/>
+        </Border>
+
+        <!-- Flight cards list -->
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding Flights}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="White" CornerRadius="12" Margin="0,0,0,12"
+                                Padding="20" Effect="{StaticResource CardShadow}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Flight info -->
+                                <StackPanel Grid.Column="0">
+                                    <!-- Airline -->
+                                    <TextBlock Text="{Binding Airline}" FontWeight="SemiBold"
+                                               FontSize="15" Foreground="#1A1A2E"/>
+
+                                    <!-- Route + times -->
+                                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding DepartureTime, StringFormat='HH:mm'}"
+                                                       FontSize="22" FontWeight="Bold" Foreground="#1A1A2E"/>
+                                            <TextBlock Text="{Binding Origin}" Foreground="#6B7280" FontSize="12"/>
+                                        </StackPanel>
+
+                                        <StackPanel Margin="16,0" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding DurationDisplay}" FontSize="11"
+                                                       Foreground="#9CA3AF" HorizontalAlignment="Center"/>
+                                            <Line X1="0" Y1="0" X2="60" Y2="0" Stroke="#D1D5DB" StrokeThickness="1"/>
+                                            <TextBlock Text="{Binding StopsDisplay}" FontSize="11"
+                                                       Foreground="#9CA3AF" HorizontalAlignment="Center"/>
+                                        </StackPanel>
+
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding ArrivalTime, StringFormat='HH:mm'}"
+                                                       FontSize="22" FontWeight="Bold" Foreground="#1A1A2E"/>
+                                            <TextBlock Text="{Binding Destination}" Foreground="#6B7280" FontSize="12"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <!-- Price + Save -->
+                                <StackPanel Grid.Column="1" HorizontalAlignment="Right"
+                                            VerticalAlignment="Center">
+                                    <TextBlock FontSize="24" FontWeight="Bold" Foreground="#6366F1"
+                                               HorizontalAlignment="Right">
+                                        <Run Text="{Binding Price, StringFormat='{}{0:F2}'}"/>
+                                        <Run Text=" "/>
+                                        <Run Text="{Binding Currency}"/>
+                                    </TextBlock>
+                                    <Button Content="Save Alert"
+                                            Command="{Binding DataContext.SaveAlertCommand,
+                                                      RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding}"
+                                            Style="{StaticResource OutlineButtonStyle}"
+                                            Margin="0,8,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
