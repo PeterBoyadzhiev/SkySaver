@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows.Input;
 using SkySaver.Helpers;
 using SkySaver.Models;
@@ -19,7 +20,7 @@ public class AlertsViewModel : ViewModelBase
         ToggleActiveCommand = new AsyncRelayCommand<PriceAlert>(ToggleActiveAsync);
     }
 
-    public ObservableCollection<PriceAlert> Alerts { get; } = [];
+    public ObservableCollection<PriceAlert> Alerts { get; } = new ObservableCollection<PriceAlert>();
 
     public bool IsLoading
     {
@@ -40,6 +41,22 @@ public class AlertsViewModel : ViewModelBase
             Alerts.Clear();
             foreach (var a in alerts)
                 Alerts.Add(a);
+        }
+        catch (Exception ex)
+        {
+            try
+            {
+                var logDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SkySaver");
+                Directory.CreateDirectory(logDir);
+                File.AppendAllText(Path.Combine(logDir, "error.log"), $"[{DateTime.UtcNow:O}] AlertsViewModel.LoadAsync error: {ex}\n");
+                try
+                {
+                    var desktop = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+                    File.AppendAllText(Path.Combine(desktop, "SkySaver-error.log"), $"[{DateTime.UtcNow:O}] AlertsViewModel.LoadAsync error: {ex}\n");
+                }
+                catch { }
+            }
+            catch { }
         }
         finally
         {

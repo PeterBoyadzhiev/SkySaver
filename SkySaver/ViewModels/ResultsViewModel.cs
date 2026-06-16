@@ -17,7 +17,7 @@ public class ResultsViewModel : ViewModelBase
         SaveAlertCommand = new AsyncRelayCommand<Flight>(SaveAlertAsync);
     }
 
-    public ObservableCollection<Flight> Flights { get; } = [];
+    public ObservableCollection<Flight> Flights { get; } = new ObservableCollection<Flight>();
 
     public string StatusMessage
     {

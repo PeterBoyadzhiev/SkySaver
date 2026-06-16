@@ -48,7 +48,7 @@
 
                                     <StackPanel Grid.Column="0">
                                         <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding DisplayRoute}"
+                                              <TextBlock Text="{Binding DisplayRoute, Mode=OneWay}"
                                                        FontSize="17" FontWeight="Bold" Foreground="#1A1A2E"/>
                                             <!-- Active badge -->
                                             <Border Background="#D1FAE5" CornerRadius="4" Padding="6,2"
@@ -65,7 +65,7 @@
 
                                         <TextBlock Margin="0,4,0,0" Foreground="#6B7280" FontSize="13">
                                             <Run Text="Departure:"/>
-                                            <Run Text="{Binding DisplayDate}"/>
+                                            <Run Text="{Binding DisplayDate, Mode=OneWay}"/>
                                         </TextBlock>
 
                                         <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
@@ -90,13 +90,13 @@
                                         <Button Content="{Binding IsActive, Converter={StaticResource BoolToToggleTextConverter}}"
                                                 Command="{Binding DataContext.ToggleActiveCommand,
                                                           RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                                CommandParameter="{Binding}"
+                                                CommandParameter="{Binding .}"
                                                 Style="{StaticResource OutlineButtonStyle}"
                                                 Width="70"/>
                                         <Button Content="Delete"
                                                 Command="{Binding DataContext.DeleteCommand,
                                                           RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                                CommandParameter="{Binding}"
+                                                CommandParameter="{Binding .}"
                                                 Style="{StaticResource DangerButtonStyle}"
                                                 Margin="0,6,0,0" Width="70"/>
                                     </StackPanel>

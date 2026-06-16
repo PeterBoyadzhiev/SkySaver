@@ -34,10 +34,11 @@
 
                     <StackPanel Grid.Column="0">
                         <TextBlock Text="FROM" Style="{StaticResource LabelStyle}"/>
-                        <TextBox Text="{Binding Origin, UpdateSourceTrigger=PropertyChanged}"
-                                 Style="{StaticResource InputStyle}"
-                                 MaxLength="3" CharacterCasing="Upper"
-                                 Tag="e.g. LHR"/>
+                        <ComboBox ItemsSource="{Binding AvailableAirports}"
+                                  SelectedItem="{Binding Origin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  Style="{StaticResource InputComboStyle}"
+                                  IsEditable="False"
+                                  HorizontalContentAlignment="Center"/>
                     </StackPanel>
 
                     <TextBlock Grid.Column="1" Text="✈" FontSize="20"
@@ -46,10 +47,11 @@
 
                     <StackPanel Grid.Column="2">
                         <TextBlock Text="TO" Style="{StaticResource LabelStyle}"/>
-                        <TextBox Text="{Binding Destination, UpdateSourceTrigger=PropertyChanged}"
-                                 Style="{StaticResource InputStyle}"
-                                 MaxLength="3" CharacterCasing="Upper"
-                                 Tag="e.g. CDG"/>
+                        <ComboBox ItemsSource="{Binding AvailableAirports}"
+                                  SelectedItem="{Binding Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  Style="{StaticResource InputComboStyle}"
+                                  IsEditable="False"
+                                  HorizontalContentAlignment="Center"/>
                     </StackPanel>
                 </Grid>
 
@@ -57,7 +59,7 @@
                 <StackPanel Margin="0,20,0,0">
                     <TextBlock Text="DEPARTURE DATE" Style="{StaticResource LabelStyle}"/>
                     <DatePicker SelectedDate="{Binding DepartureDate}"
-                                DisplayDateStart="{Binding Source={x:Static sys:DateTime.Today}}"
+                                DisplayDateStart="{Binding Source={x:Static sys:DateTime.Today}, Path=.}"
                                 Style="{StaticResource DatePickerStyle}"/>
                 </StackPanel>
 

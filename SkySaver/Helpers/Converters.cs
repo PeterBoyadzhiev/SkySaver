@@ -26,7 +26,7 @@ public class InverseBoolToVisibilityConverter : IValueConverter
 public class StringToVisibilityConverter : IValueConverter
 {
     public object Convert(object value, Type t, object p, CultureInfo c)
-        => string.IsNullOrEmpty(value as string) ? Visibility.Collapsed : Visibility.Visible;
+        => string.IsNullOrEmpty(value as string) ? Visibility.Visible : Visibility.Collapsed;
     public object ConvertBack(object value, Type t, object p, CultureInfo c)
         => throw new NotImplementedException();
 }

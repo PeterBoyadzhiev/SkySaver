@@ -5,7 +5,7 @@ namespace SkySaver.Models;
 public class AviationStackResponse
 {
     [JsonPropertyName("data")]
-    public List<AviationStackFlight> Data { get; set; } = [];
+    public List<AviationStackFlight> Data { get; set; } = new List<AviationStackFlight>();
 }
 
 public class AviationStackFlight

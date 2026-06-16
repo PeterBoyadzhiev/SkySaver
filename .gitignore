@@ -14,3 +14,4 @@ obj/
 
 # User secrets / credentials
 appsettings.local.json
+appsettings.json

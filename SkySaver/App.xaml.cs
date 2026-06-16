@@ -54,6 +54,25 @@ public partial class App : Application
 
         _services = services.BuildServiceProvider();
 
+        // Global exception logging to help diagnose runtime crashes (e.g. opening views)
+        this.DispatcherUnhandledException += (s, ev) =>
+        {
+            try
+            {
+                var logDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SkySaver");
+                Directory.CreateDirectory(logDir);
+                File.AppendAllText(Path.Combine(logDir, "error.log"), $"[{DateTime.UtcNow:O}] Unhandled: {ev.Exception}\n");
+                try
+                {
+                    var desktop = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+                    File.AppendAllText(Path.Combine(desktop, "SkySaver-error.log"), $"[{DateTime.UtcNow:O}] Unhandled: {ev.Exception}\n");
+                }
+                catch { }
+            }
+            catch { }
+            ev.Handled = true;
+        };
+
         _monitor = _services.GetRequiredService<AlertMonitorService>();
         _monitor.Start();
 

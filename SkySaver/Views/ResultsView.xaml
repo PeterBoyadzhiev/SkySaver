@@ -79,7 +79,7 @@
                                     <Button Content="Save Alert"
                                             Command="{Binding DataContext.SaveAlertCommand,
                                                       RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                            CommandParameter="{Binding}"
+                                            CommandParameter="{Binding .}"
                                             Style="{StaticResource OutlineButtonStyle}"
                                             Margin="0,8,0,0"/>
                                 </StackPanel>

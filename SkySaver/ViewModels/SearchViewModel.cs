@@ -16,23 +16,27 @@ public class SearchViewModel : ViewModelBase
     private DateTime _departureDate = DateTime.Today.AddDays(7);
     private bool _isLoading;
     private string _errorMessage = string.Empty;
+    public ObservableCollection<string> AvailableAirports { get; } = new();
 
     public SearchViewModel(IFlightServiceFactory factory)
     {
         _factory = factory;
         SearchCommand = new AsyncRelayCommand(SearchAsync, () => CanSearch);
+        // populate available airports for the dropdowns
+        var airports = new[] { "SOF", "LHR", "TXL", "CDG", "FCO", "AMS", "MXP" };
+        foreach (var a in airports) AvailableAirports.Add(a);
     }
 
     public string Origin
     {
         get => _origin;
-        set { if (SetProperty(ref _origin, value.ToUpper())) OnPropertyChanged(nameof(CanSearch)); }
+        set { var v = (value ?? string.Empty).ToUpper(); if (SetProperty(ref _origin, v)) OnPropertyChanged(nameof(CanSearch)); }
     }
 
     public string Destination
     {
         get => _destination;
-        set { if (SetProperty(ref _destination, value.ToUpper())) OnPropertyChanged(nameof(CanSearch)); }
+        set { var v = (value ?? string.Empty).ToUpper(); if (SetProperty(ref _destination, v)) OnPropertyChanged(nameof(CanSearch)); }
     }
 
     public DateTime DepartureDate
@@ -61,7 +65,7 @@ public class SearchViewModel : ViewModelBase
         Destination.Length == 3 &&
         DepartureDate >= DateTime.Today;
 
-    public ObservableCollection<Flight> Results { get; } = [];
+    public ObservableCollection<Flight> Results { get; } = new ObservableCollection<Flight>();
 
     public ICommand SearchCommand { get; }
 
