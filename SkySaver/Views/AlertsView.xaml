@@ -38,8 +38,20 @@
                 <ItemsControl ItemsSource="{Binding Alerts}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border Background="White" CornerRadius="12" Margin="0,0,0,12"
+                            <Border CornerRadius="12" Margin="0,0,0,12"
                                     Padding="20" Effect="{StaticResource CardShadow}">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Background" Value="White"/>
+                                        <Setter Property="Opacity"    Value="1"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsActive}" Value="False">
+                                                <Setter Property="Background" Value="#F9FAFB"/>
+                                                <Setter Property="Opacity"    Value="0.7"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
@@ -91,8 +103,65 @@
                                                 Command="{Binding DataContext.ToggleActiveCommand,
                                                           RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                                 CommandParameter="{Binding .}"
-                                                Style="{StaticResource OutlineButtonStyle}"
-                                                Width="70"/>
+                                                Width="70">
+                                            <Button.Style>
+                                                <Style TargetType="Button">
+                                                    <!-- Default: green/Resume appearance (IsActive=False) -->
+                                                    <Setter Property="Background"      Value="Transparent"/>
+                                                    <Setter Property="Foreground"      Value="#059669"/>
+                                                    <Setter Property="BorderBrush"     Value="#059669"/>
+                                                    <Setter Property="BorderThickness" Value="1.5"/>
+                                                    <Setter Property="Padding"         Value="8,6"/>
+                                                    <Setter Property="Cursor"          Value="Hand"/>
+                                                    <Setter Property="FontSize"        Value="12"/>
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="Button">
+                                                                <Border Background="{TemplateBinding Background}"
+                                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                                                        CornerRadius="6"
+                                                                        Padding="{TemplateBinding Padding}">
+                                                                    <ContentPresenter HorizontalAlignment="Center"
+                                                                                      VerticalAlignment="Center"/>
+                                                                </Border>
+                                                                <ControlTemplate.Triggers>
+                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                        <Setter Property="Background" Value="#ECFDF5"/>
+                                                                    </Trigger>
+                                                                </ControlTemplate.Triggers>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Style.Triggers>
+                                                        <!-- IsActive=True: switch to amber/Pause appearance -->
+                                                        <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                                            <Setter Property="Foreground"  Value="#D97706"/>
+                                                            <Setter Property="BorderBrush" Value="#D97706"/>
+                                                            <Setter Property="Template">
+                                                                <Setter.Value>
+                                                                    <ControlTemplate TargetType="Button">
+                                                                        <Border Background="{TemplateBinding Background}"
+                                                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                                                CornerRadius="6"
+                                                                                Padding="{TemplateBinding Padding}">
+                                                                            <ContentPresenter HorizontalAlignment="Center"
+                                                                                              VerticalAlignment="Center"/>
+                                                                        </Border>
+                                                                        <ControlTemplate.Triggers>
+                                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                                <Setter Property="Background" Value="#FFFBEB"/>
+                                                                            </Trigger>
+                                                                        </ControlTemplate.Triggers>
+                                                                    </ControlTemplate>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
                                         <Button Content="Delete"
                                                 Command="{Binding DataContext.DeleteCommand,
                                                           RelativeSource={RelativeSource AncestorType=ItemsControl}}"

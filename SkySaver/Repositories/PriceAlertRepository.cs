@@ -100,6 +100,7 @@ public class PriceAlertRepository : IPriceAlertRepository
         await conn.OpenAsync();
 
         await using var cmd = conn.CreateCommand();
+        // Intentionally no IsActive filter — paused alerts still count as saved
         cmd.CommandText = """
             SELECT COUNT(1) FROM PriceAlerts
             WHERE Origin = $origin

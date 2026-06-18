@@ -4,17 +4,20 @@ using System.Windows.Input;
 using SkySaver.Helpers;
 using SkySaver.Models;
 using SkySaver.Repositories;
+using SkySaver.Services;
 
 namespace SkySaver.ViewModels;
 
 public class AlertsViewModel : ViewModelBase
 {
     private readonly IPriceAlertRepository _repo;
+    private readonly IDialogService _dialogService;
     private bool _isLoading;
 
-    public AlertsViewModel(IPriceAlertRepository repo)
+    public AlertsViewModel(IPriceAlertRepository repo, IDialogService dialogService)
     {
         _repo = repo;
+        _dialogService = dialogService;
         LoadCommand = new AsyncRelayCommand(LoadAsync);
         DeleteCommand = new AsyncRelayCommand<PriceAlert>(DeleteAsync);
         ToggleActiveCommand = new AsyncRelayCommand<PriceAlert>(ToggleActiveAsync);
@@ -67,6 +70,8 @@ public class AlertsViewModel : ViewModelBase
     private async Task DeleteAsync(PriceAlert? alert)
     {
         if (alert == null) return;
+        if (!_dialogService.Confirm("Delete Alert", "Are you sure you want to delete this alert? This cannot be undone."))
+            return;
         await _repo.DeleteAsync(alert.Id);
         Alerts.Remove(alert);
     }
@@ -76,6 +81,5 @@ public class AlertsViewModel : ViewModelBase
         if (alert == null) return;
         alert.IsActive = !alert.IsActive;
         await _repo.UpdateAsync(alert);
-        OnPropertyChanged(nameof(Alerts));
     }
 }

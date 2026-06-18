@@ -177,6 +177,62 @@
             </Setter>
         </Style>
 
+        <!-- Pause button (amber) — shown when alert IS active, button label = "Pause" -->
+        <Style x:Key="PauseButtonStyle" TargetType="Button">
+            <Setter Property="Background"      Value="Transparent"/>
+            <Setter Property="Foreground"      Value="#D97706"/>
+            <Setter Property="BorderBrush"     Value="#D97706"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="FontSize"        Value="12"/>
+            <Setter Property="Padding"         Value="8,6"/>
+            <Setter Property="Cursor"          Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FFFBEB"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Resume button (green) — shown when alert is paused, button label = "Resume" -->
+        <Style x:Key="ResumeButtonStyle" TargetType="Button">
+            <Setter Property="Background"      Value="Transparent"/>
+            <Setter Property="Foreground"      Value="#059669"/>
+            <Setter Property="BorderBrush"     Value="#059669"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="FontSize"        Value="12"/>
+            <Setter Property="Padding"         Value="8,6"/>
+            <Setter Property="Cursor"          Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#ECFDF5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <!-- Nav button -->
         <Style x:Key="NavButtonStyle" TargetType="Button">
             <Setter Property="Background"      Value="Transparent"/>

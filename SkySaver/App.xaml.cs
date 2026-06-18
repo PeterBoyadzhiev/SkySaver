@@ -39,6 +39,7 @@ public partial class App : Application
         services.AddSingleton<IPriceAlertRepository, PriceAlertRepository>();
         services.AddSingleton<INotificationService, WindowsNotificationService>();
         services.AddSingleton<AlertMonitorService>();
+        services.AddSingleton<IDialogService, WpfDialogService>();
 
         services.AddTransient<SearchViewModel>();
         services.AddTransient<ResultsViewModel>(sp =>
