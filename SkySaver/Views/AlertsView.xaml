@@ -98,18 +98,18 @@
                                     </StackPanel>
 
                                     <!-- Actions -->
-                                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="12,0,0,0">
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="12,0,0,0" HorizontalAlignment="Left" Width="170">
                                         <Button Content="{Binding IsActive, Converter={StaticResource BoolToToggleTextConverter}}"
                                                 Command="{Binding DataContext.ToggleActiveCommand,
                                                           RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                                 CommandParameter="{Binding .}"
-                                                Width="70">
+                                                Width="170" Height="38" HorizontalAlignment="Left">
                                             <Button.Style>
                                                 <Style TargetType="Button">
-                                                    <!-- Default: green/Resume appearance (IsActive=False) -->
+                                                    <!-- Default: blue/Resume appearance (IsActive=False) -->
                                                     <Setter Property="Background"      Value="Transparent"/>
-                                                    <Setter Property="Foreground"      Value="#059669"/>
-                                                    <Setter Property="BorderBrush"     Value="#059669"/>
+                                                    <Setter Property="Foreground"      Value="#055796"/>
+                                                    <Setter Property="BorderBrush"     Value="#055796"/>
                                                     <Setter Property="BorderThickness" Value="1.5"/>
                                                     <Setter Property="Padding"         Value="8,6"/>
                                                     <Setter Property="Cursor"          Value="Hand"/>
@@ -127,7 +127,7 @@
                                                                 </Border>
                                                                 <ControlTemplate.Triggers>
                                                                     <Trigger Property="IsMouseOver" Value="True">
-                                                                        <Setter Property="Background" Value="#ECFDF5"/>
+                                                                        <Setter Property="Background" Value="#cbe0f7"/>
                                                                     </Trigger>
                                                                 </ControlTemplate.Triggers>
                                                             </ControlTemplate>
@@ -163,31 +163,36 @@
                                             </Button.Style>
                                         </Button>
                                         <!-- Delete button: visible when NOT confirming -->
-                                        <Button Content="Delete"
-                                                Command="{Binding DataContext.RequestDeleteCommand,
-                                                          RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                                CommandParameter="{Binding .}"
-                                                Style="{StaticResource DangerButtonStyle}"
-                                                Visibility="{Binding IsConfirmingDelete, Converter={StaticResource InverseBoolToVisibilityConverter}}"
-                                                Margin="0,6,0,0" Width="70"/>
-
-                                        <!-- Yes/No strip: visible when confirming delete -->
-                                        <StackPanel Orientation="Horizontal"
-                                                    Visibility="{Binding IsConfirmingDelete, Converter={StaticResource BoolToVisibilityConverter}}"
-                                                    Margin="0,6,0,0">
-                                            <Button Content="Yes"
-                                                    Command="{Binding DataContext.ConfirmDeleteCommand,
+                                        <Grid Margin="0,6,0,0" Width="170" Height="38">
+                                            <Button Content="Delete"
+                                                    Command="{Binding DataContext.RequestDeleteCommand,
                                                               RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                                     CommandParameter="{Binding .}"
                                                     Style="{StaticResource DangerButtonStyle}"
-                                                    Width="32"/>
-                                            <Button Content="No"
-                                                    Command="{Binding DataContext.CancelDeleteCommand,
-                                                              RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                                    CommandParameter="{Binding .}"
-                                                    Style="{StaticResource OutlineButtonStyle}"
-                                                    Width="32" Margin="4,0,0,0"/>
-                                        </StackPanel>
+                                                    Visibility="{Binding IsConfirmingDelete, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                                                    Width="170" Height="38" HorizontalAlignment="Left"/>
+
+                                            <!-- Yes/No strip: visible when confirming delete -->
+                                            <StackPanel Orientation="Horizontal"
+                                                        Visibility="{Binding IsConfirmingDelete, Converter={StaticResource BoolToVisibilityConverter}}"
+                                                        HorizontalAlignment="Left"
+                                                        Width="170" Height="38">
+                                                <Button Content="Yes"
+                                                        Command="{Binding DataContext.ConfirmDeleteCommand,
+                                                                  RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                        CommandParameter="{Binding .}"
+                                                        Style="{StaticResource OutlineButtonStyle}"
+                                                        Foreground="#059669"
+                                                        BorderBrush="#059669"
+                                                        Width="80" Height="38" HorizontalAlignment="Left"/>
+                                                <Button Content="No"
+                                                        Command="{Binding DataContext.CancelDeleteCommand,
+                                                                  RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                        CommandParameter="{Binding .}"
+                                                        Style="{StaticResource DangerButtonStyle}"
+                                                        Width="80" Height="38" Margin="10,0,0,0" HorizontalAlignment="Left"/>
+                                            </StackPanel>
+                                        </Grid>
                                     </StackPanel>
                                 </Grid>
                             </Border>
