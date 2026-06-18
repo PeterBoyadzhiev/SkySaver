@@ -14,13 +14,47 @@
         <StackPanel Grid.Row="0" Margin="0,0,0,16">
             <TextBlock Text="Search Results" FontSize="28" FontWeight="Bold"
                        Foreground="#1A1A2E"/>
-            <TextBlock Text="{Binding Flights.Count, StringFormat='{}{0} flights found'}"
-                       FontSize="14" Foreground="#6B7280" Margin="0,4,0,0"/>
+            <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                <TextBlock Text="{Binding Flights.Count, StringFormat='{}{0} flights found'}"
+                           FontSize="14" Foreground="#6B7280"/>
+                <!-- Data source badge -->
+                <Border Margin="12,0,0,0" CornerRadius="6" Padding="8,2"
+                        Visibility="{Binding DataSourceLabel, Converter={StaticResource NonEmptyStringToVisibilityConverter}}">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Background" Value="#F3F4F6"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding DataSourceLabel}" Value="Live API (Aviationstack)">
+                                    <Setter Property="Background" Value="#EFF6FF"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <TextBlock FontSize="12" VerticalAlignment="Center">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Foreground" Value="#6B7280"/>
+                                <Setter Property="Text" Value="{Binding DataSourceLabel}"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding DataSourceLabel}" Value="Live API (Aviationstack)">
+                                        <Setter Property="Foreground" Value="#2563EB"/>
+                                        <Setter Property="Text" Value="📡 Live API (Aviationstack)"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding DataSourceLabel}" Value="Mock data (offline)">
+                                        <Setter Property="Foreground" Value="#6B7280"/>
+                                        <Setter Property="Text" Value="💾 Mock data (offline)"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </Border>
+            </StackPanel>
         </StackPanel>
 
         <!-- Status message (after saving alert) -->
         <Border Grid.Row="1" Background="#EEF2FF" CornerRadius="8" Padding="12" Margin="0,0,0,12"
-                Visibility="{Binding StatusMessage, Converter={StaticResource StringToVisibilityConverter}}">
+                Visibility="{Binding StatusMessage, Converter={StaticResource NonEmptyStringToVisibilityConverter}}">
             <TextBlock Text="{Binding StatusMessage}" Foreground="#4338CA" TextWrapping="Wrap"/>
         </Border>
 
@@ -76,12 +110,27 @@
                                         <Run Text=" "/>
                                         <Run Text="{Binding Currency}"/>
                                     </TextBlock>
-                                    <Button Content="Save Alert"
+
+                                    <!-- Save Alert button with saved/unsaved states -->
+                                    <Button CommandParameter="{Binding .}"
                                             Command="{Binding DataContext.SaveAlertCommand,
                                                       RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                            CommandParameter="{Binding .}"
-                                            Style="{StaticResource OutlineButtonStyle}"
-                                            Margin="0,8,0,0"/>
+                                            IsEnabled="{Binding IsAlertSaved, Converter={StaticResource InverseBoolConverter}}"
+                                            Margin="0,8,0,0">
+                                        <Button.Style>
+                                            <Style TargetType="Button" BasedOn="{StaticResource OutlineButtonStyle}">
+                                                <Setter Property="Content" Value="Save Alert"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsAlertSaved}" Value="True">
+                                                        <Setter Property="Content" Value="✓ Alert Saved"/>
+                                                        <Setter Property="Background" Value="#D1FAE5"/>
+                                                        <Setter Property="BorderBrush" Value="#059669"/>
+                                                        <Setter Property="Foreground" Value="#059669"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
                                 </StackPanel>
                             </Grid>
                         </Border>

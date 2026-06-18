@@ -94,6 +94,26 @@ public class PriceAlertRepository : IPriceAlertRepository
         await cmd.ExecuteNonQueryAsync();
     }
 
+    public async Task<bool> ExistsAsync(string origin, string destination, DateTime departureDate)
+    {
+        await using var conn = new SqliteConnection(ConnectionString);
+        await conn.OpenAsync();
+
+        await using var cmd = conn.CreateCommand();
+        cmd.CommandText = """
+            SELECT COUNT(1) FROM PriceAlerts
+            WHERE Origin = $origin
+              AND Destination = $dest
+              AND DepartureDate = $date
+            """;
+        cmd.Parameters.AddWithValue("$origin", origin);
+        cmd.Parameters.AddWithValue("$dest", destination);
+        cmd.Parameters.AddWithValue("$date", departureDate.ToString("o"));
+
+        var result = await cmd.ExecuteScalarAsync();
+        return Convert.ToInt64(result) > 0;
+    }
+
     private static PriceAlert MapRow(SqliteDataReader r) => new()
     {
         Id = r.GetInt32(r.GetOrdinal("Id")),

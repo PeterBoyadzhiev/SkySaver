@@ -39,9 +39,16 @@
                 <StackPanel Visibility="{Binding IsLiveMode,
                             Converter={StaticResource BoolToVisibilityConverter}}">
                     <TextBlock Text="AVIATIONSTACK API KEY" Style="{StaticResource LabelStyle}"/>
-                    <TextBox Text="{Binding AviationStackApiKey, UpdateSourceTrigger=PropertyChanged}"
-                             Style="{StaticResource InputStyle}"
-                             Tag="Paste your free API key here"/>
+                    <PasswordBox x:Name="ApiKeyBox"
+                                 PasswordChanged="ApiKeyBox_PasswordChanged"
+                                 Loaded="ApiKeyBox_Loaded"
+                                 FontSize="16"
+                                 Padding="12,10"
+                                 BorderBrush="#E5E7EB"
+                                 BorderThickness="1.5"
+                                 Background="#F9FAFB"
+                                 Foreground="#111827"
+                                 MaxLength="64"/>
                     <TextBlock Margin="0,8,0,0" FontSize="11" Foreground="#9CA3AF"
                                TextWrapping="Wrap"
                                Text="Get a free key at aviationstack.com — no credit card required. Free plan supports HTTP only."/>

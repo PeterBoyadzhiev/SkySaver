@@ -46,6 +46,15 @@ public class SettingsViewModel : ViewModelBase
         }
     }
 
+    /// <summary>
+    /// Called from SettingsView code-behind when PasswordBox.Password changes.
+    /// </summary>
+    public void SetApiKey(string key)
+    {
+        _config.AviationStackApiKey = key;
+        OnPropertyChanged(nameof(AviationStackApiKey));
+    }
+
     public string ModeLabel => _config.DataSourceMode == DataSourceMode.Mock
         ? "Offline mode (Mock data)"
         : "Live API mode (Aviationstack)";

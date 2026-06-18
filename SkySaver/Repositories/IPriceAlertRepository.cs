@@ -9,4 +9,5 @@ public interface IPriceAlertRepository
     Task<int> AddAsync(PriceAlert alert);
     Task UpdateAsync(PriceAlert alert);
     Task DeleteAsync(int id);
+    Task<bool> ExistsAsync(string origin, string destination, DateTime departureDate);
 }

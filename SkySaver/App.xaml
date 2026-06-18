@@ -6,12 +6,14 @@
     <Application.Resources>
 
         <!-- Converters -->
-        <helpers:BoolToVisibilityConverter        x:Key="BoolToVisibilityConverter"/>
-        <helpers:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
-        <helpers:StringToVisibilityConverter      x:Key="StringToVisibilityConverter"/>
-        <helpers:ZeroToVisibilityConverter        x:Key="ZeroToVisibilityConverter"/>
-        <helpers:NullToVisibilityConverter        x:Key="NullToVisibilityConverter"/>
-        <helpers:BoolToToggleTextConverter        x:Key="BoolToToggleTextConverter"/>
+        <helpers:BoolToVisibilityConverter             x:Key="BoolToVisibilityConverter"/>
+        <helpers:InverseBoolToVisibilityConverter      x:Key="InverseBoolToVisibilityConverter"/>
+        <helpers:StringToVisibilityConverter           x:Key="StringToVisibilityConverter"/>
+        <helpers:ZeroToVisibilityConverter             x:Key="ZeroToVisibilityConverter"/>
+        <helpers:NullToVisibilityConverter             x:Key="NullToVisibilityConverter"/>
+        <helpers:BoolToToggleTextConverter             x:Key="BoolToToggleTextConverter"/>
+        <helpers:NonEmptyStringToVisibilityConverter   x:Key="NonEmptyStringToVisibilityConverter"/>
+        <helpers:InverseBoolConverter                  x:Key="InverseBoolConverter"/>
 
         <!-- Shadow -->
         <DropShadowEffect x:Key="CardShadow" BlurRadius="20" ShadowDepth="2"

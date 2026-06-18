@@ -21,10 +21,12 @@ public class FlightServiceFactory : IFlightServiceFactory
         if (_config.DataSourceMode == DataSourceMode.AviationStack
             && !string.IsNullOrWhiteSpace(_config.AviationStackApiKey))
         {
+            _config.LastUsedSource = "Live API (Aviationstack)";
             var live = new AviationStackFlightService(_http, _config.AviationStackApiKey);
             return new FallbackFlightService(live, _mock);
         }
 
+        _config.LastUsedSource = "Mock data (offline)";
         return _mock;
     }
 }

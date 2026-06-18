@@ -41,7 +41,10 @@ public partial class App : Application
         services.AddSingleton<AlertMonitorService>();
 
         services.AddTransient<SearchViewModel>();
-        services.AddTransient<ResultsViewModel>();
+        services.AddTransient<ResultsViewModel>(sp =>
+            new ResultsViewModel(
+                sp.GetRequiredService<IPriceAlertRepository>(),
+                sp.GetRequiredService<AppConfig>()));
         services.AddTransient<AlertsViewModel>();
         services.AddTransient<SettingsViewModel>();
         services.AddSingleton<MainViewModel>();

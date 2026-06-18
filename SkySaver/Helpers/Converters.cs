@@ -57,3 +57,23 @@ public class BoolToToggleTextConverter : IValueConverter
     public object ConvertBack(object value, Type t, object p, CultureInfo c)
         => throw new NotImplementedException();
 }
+
+/// <summary>Shows element when string is NOT null/empty; hides when null/empty.</summary>
+[ValueConversion(typeof(string), typeof(Visibility))]
+public class NonEmptyStringToVisibilityConverter : IValueConverter
+{
+    public object Convert(object value, Type t, object p, CultureInfo c)
+        => string.IsNullOrEmpty(value as string) ? Visibility.Collapsed : Visibility.Visible;
+    public object ConvertBack(object value, Type t, object p, CultureInfo c)
+        => throw new NotImplementedException();
+}
+
+/// <summary>Inverts a bool value (true→false, false→true).</summary>
+[ValueConversion(typeof(bool), typeof(bool))]
+public class InverseBoolConverter : IValueConverter
+{
+    public object Convert(object value, Type t, object p, CultureInfo c)
+        => value is bool b && !b;
+    public object ConvertBack(object value, Type t, object p, CultureInfo c)
+        => value is bool b && !b;
+}

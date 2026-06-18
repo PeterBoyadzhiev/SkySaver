@@ -2,7 +2,9 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             Background="Transparent">
+             xmlns:local="clr-namespace:SkySaver.Views"
+             Background="Transparent"
+             x:Name="SearchViewRoot">
 
     <Grid MaxWidth="520" Margin="40">
         <Grid.RowDefinitions>
@@ -63,6 +65,23 @@
                                 Style="{StaticResource DatePickerStyle}"/>
                 </StackPanel>
 
+                <!-- Round-trip toggle -->
+                <CheckBox Margin="0,16,0,0"
+                          FontSize="14" Foreground="#374151" Cursor="Hand"
+                          Content="Round trip"
+                          IsChecked="{Binding IsRoundTrip, Mode=OneWay}"
+                          Checked="RoundTripCheckBox_Checked"
+                          Unchecked="RoundTripCheckBox_Unchecked"/>
+
+                <!-- Return Date (visible only when round-trip is checked) -->
+                <StackPanel Margin="0,12,0,0"
+                            Visibility="{Binding IsRoundTrip, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <TextBlock Text="RETURN DATE" Style="{StaticResource LabelStyle}"/>
+                    <DatePicker SelectedDate="{Binding ReturnDate, Mode=TwoWay}"
+                                DisplayDateStart="{Binding DepartureDate}"
+                                Style="{StaticResource DatePickerStyle}"/>
+                </StackPanel>
+
                 <!-- Search Button -->
                 <Button Content="Search Flights"
                         Command="{Binding SearchCommand}"
@@ -87,9 +106,5 @@
             </StackPanel>
         </Border>
 
-        <!-- Tip -->
-        <TextBlock Grid.Row="2" Margin="0,16,0,0"
-                   Text="💡 Enter 3-letter IATA codes (e.g. LHR, JFK, SOF)"
-                   Foreground="#9CA3AF" FontSize="12" HorizontalAlignment="Center"/>
     </Grid>
 </UserControl>

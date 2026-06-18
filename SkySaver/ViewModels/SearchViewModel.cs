@@ -14,6 +14,7 @@ public class SearchViewModel : ViewModelBase
     private string _origin = string.Empty;
     private string _destination = string.Empty;
     private DateTime _departureDate = DateTime.Today.AddDays(7);
+    private DateTime? _returnDate = null;
     private bool _isLoading;
     private string _errorMessage = string.Empty;
     public ObservableCollection<string> AvailableAirports { get; } = new();
@@ -44,6 +45,22 @@ public class SearchViewModel : ViewModelBase
         get => _departureDate;
         set { if (SetProperty(ref _departureDate, value)) OnPropertyChanged(nameof(CanSearch)); }
     }
+
+    public DateTime? ReturnDate
+    {
+        get => _returnDate;
+        set
+        {
+            if (SetProperty(ref _returnDate, value))
+            {
+                OnPropertyChanged(nameof(CanSearch));
+                OnPropertyChanged(nameof(IsRoundTrip));
+            }
+        }
+    }
+
+    /// <summary>True when a return date is set.</summary>
+    public bool IsRoundTrip => _returnDate.HasValue;
 
     public bool IsLoading
     {
@@ -81,10 +98,19 @@ public class SearchViewModel : ViewModelBase
         try
         {
             var service = _factory.Create();
-            var flights = await service.SearchFlightsAsync(Origin, Destination, DepartureDate);
 
+            // Outbound search
+            var flights = await service.SearchFlightsAsync(Origin, Destination, DepartureDate);
             foreach (var f in flights)
                 Results.Add(f);
+
+            // Return search (if round-trip)
+            if (IsRoundTrip && ReturnDate.HasValue)
+            {
+                var returnFlights = await service.SearchFlightsAsync(Destination, Origin, ReturnDate.Value);
+                foreach (var f in returnFlights)
+                    Results.Add(f);
+            }
 
             SearchCompleted?.Invoke(Results);
 
