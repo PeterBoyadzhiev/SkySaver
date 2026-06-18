@@ -63,6 +63,7 @@ public class SearchViewModel : ViewModelBase
         !IsLoading &&
         Origin.Length == 3 &&
         Destination.Length == 3 &&
+        Origin != Destination &&
         DepartureDate >= DateTime.Today;
 
     public ObservableCollection<Flight> Results { get; } = new ObservableCollection<Flight>();
@@ -88,7 +89,7 @@ public class SearchViewModel : ViewModelBase
             SearchCompleted?.Invoke(Results);
 
             if (Results.Count == 0)
-                ErrorMessage = "No flights found. Supported routes: SOF↔LHR, SOF↔TXL, SOF↔CDG, SOF↔FCO, SOF↔AMS, SOF↔MXP.";
+                ErrorMessage = "No flights found for this route. In mock mode, supported airports are: SOF, LHR, TXL, CDG, FCO, AMS, MXP (any combination).";
         }
         catch (HttpRequestException ex)
         {
