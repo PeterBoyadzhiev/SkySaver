@@ -162,12 +162,32 @@
                                                 </Style>
                                             </Button.Style>
                                         </Button>
+                                        <!-- Delete button: visible when NOT confirming -->
                                         <Button Content="Delete"
-                                                Command="{Binding DataContext.DeleteCommand,
+                                                Command="{Binding DataContext.RequestDeleteCommand,
                                                           RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                                 CommandParameter="{Binding .}"
                                                 Style="{StaticResource DangerButtonStyle}"
+                                                Visibility="{Binding IsConfirmingDelete, Converter={StaticResource InverseBoolToVisibilityConverter}}"
                                                 Margin="0,6,0,0" Width="70"/>
+
+                                        <!-- Yes/No strip: visible when confirming delete -->
+                                        <StackPanel Orientation="Horizontal"
+                                                    Visibility="{Binding IsConfirmingDelete, Converter={StaticResource BoolToVisibilityConverter}}"
+                                                    Margin="0,6,0,0">
+                                            <Button Content="Yes"
+                                                    Command="{Binding DataContext.ConfirmDeleteCommand,
+                                                              RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                    CommandParameter="{Binding .}"
+                                                    Style="{StaticResource DangerButtonStyle}"
+                                                    Width="32"/>
+                                            <Button Content="No"
+                                                    Command="{Binding DataContext.CancelDeleteCommand,
+                                                              RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                    CommandParameter="{Binding .}"
+                                                    Style="{StaticResource OutlineButtonStyle}"
+                                                    Width="32" Margin="4,0,0,0"/>
+                                        </StackPanel>
                                     </StackPanel>
                                 </Grid>
                             </Border>

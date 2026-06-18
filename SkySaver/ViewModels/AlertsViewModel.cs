@@ -4,22 +4,21 @@ using System.Windows.Input;
 using SkySaver.Helpers;
 using SkySaver.Models;
 using SkySaver.Repositories;
-using SkySaver.Services;
 
 namespace SkySaver.ViewModels;
 
 public class AlertsViewModel : ViewModelBase
 {
     private readonly IPriceAlertRepository _repo;
-    private readonly IDialogService _dialogService;
     private bool _isLoading;
 
-    public AlertsViewModel(IPriceAlertRepository repo, IDialogService dialogService)
+    public AlertsViewModel(IPriceAlertRepository repo)
     {
         _repo = repo;
-        _dialogService = dialogService;
         LoadCommand = new AsyncRelayCommand(LoadAsync);
-        DeleteCommand = new AsyncRelayCommand<PriceAlert>(DeleteAsync);
+        RequestDeleteCommand = new AsyncRelayCommand<PriceAlert>(RequestDeleteAsync);
+        ConfirmDeleteCommand = new AsyncRelayCommand<PriceAlert>(ConfirmDeleteAsync);
+        CancelDeleteCommand = new AsyncRelayCommand<PriceAlert>(alert => { if (alert != null) alert.IsConfirmingDelete = false; return Task.CompletedTask; });
         ToggleActiveCommand = new AsyncRelayCommand<PriceAlert>(ToggleActiveAsync);
     }
 
@@ -32,7 +31,9 @@ public class AlertsViewModel : ViewModelBase
     }
 
     public ICommand LoadCommand { get; }
-    public ICommand DeleteCommand { get; }
+    public ICommand RequestDeleteCommand { get; }
+    public ICommand ConfirmDeleteCommand { get; }
+    public ICommand CancelDeleteCommand { get; }
     public ICommand ToggleActiveCommand { get; }
 
     private async Task LoadAsync()
@@ -67,11 +68,18 @@ public class AlertsViewModel : ViewModelBase
         }
     }
 
-    private async Task DeleteAsync(PriceAlert? alert)
+    // Step 1 — show inline confirmation UI; no repository call.
+    private Task RequestDeleteAsync(PriceAlert? alert)
+    {
+        if (alert != null)
+            alert.IsConfirmingDelete = true;
+        return Task.CompletedTask;
+    }
+
+    // Step 2 — user confirmed; delete from repo and remove from collection.
+    private async Task ConfirmDeleteAsync(PriceAlert? alert)
     {
         if (alert == null) return;
-        if (!_dialogService.Confirm("Delete Alert", "Are you sure you want to delete this alert? This cannot be undone."))
-            return;
         await _repo.DeleteAsync(alert.Id);
         Alerts.Remove(alert);
     }

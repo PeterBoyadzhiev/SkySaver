@@ -32,6 +32,19 @@ public class PriceAlert : INotifyPropertyChanged
         }
     }
 
+    // UI-only state — never persisted to SQLite
+    private bool _isConfirmingDelete = false;
+    public bool IsConfirmingDelete
+    {
+        get => _isConfirmingDelete;
+        set
+        {
+            if (_isConfirmingDelete == value) return;
+            _isConfirmingDelete = value;
+            OnPropertyChanged();
+        }
+    }
+
     public string Currency { get; set; } = "EUR";
     public string DisplayRoute => $"{Origin} → {Destination}";
     public string DisplayDate => DepartureDate.ToString("MMM dd, yyyy");
