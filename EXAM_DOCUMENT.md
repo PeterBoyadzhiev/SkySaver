@@ -116,7 +116,7 @@ Tested mock mode without any API key. Tested fallback by using an intentionally 
 **Key prompts (actual)**
 
 ChatGPT-drafted prompt delivered to Claude Code:
-> *"Update the existing SkySaver Desktop WPF application to support BOTH: Aviationstack API mode (online) and Offline mock data mode (no API key required). The goal is that the application works fully even without any external API or account setup... Default it to Mock so the application works immediately after cloning/running... If Aviationstack API fails, times out, or returns empty results — automatically fallback to MockFlightService... App must ALWAYS return results."*
+> *"Turns out Amadeus no longer provides free API plans so we need to switch to a different service. It would also be good to have mock data instead of relying on a third-party API so the application can be tested. Update the existing SkySaver Desktop WPF application to support BOTH: Aviationstack API mode (online) and Offline mock data mode (no API key required). The goal is that the application works fully even without any external API or account setup. Add a configurable setting and default it to Mock so the application works immediately after cloning/running. If Aviationstack API fails, times out, or returns empty results — automatically fallback to MockFlightService. The app must ALWAYS return results."*
 
 ---
 
@@ -165,7 +165,7 @@ Set a target price above the mock flight price, confirmed the toast notification
 
 **Key prompts (actual)**
 
-> *"AlertMonitorService should use IFlightServiceFactory and call _factory.Create() on each check, not hold a direct IFlightService reference. That way changing the mode in Settings affects alert checks too."*
+> *"At the moment the background monitor holds a direct reference to the flight service. It should use the factory instead and resolve the service on each check, so that if the user switches modes in Settings, the alerts are checked using the new mode too."*
 
 ---
 
@@ -216,10 +216,10 @@ Build verification (`dotnet build`, 0 errors, 0 warnings) after every agent run.
 
 **Key prompts (actual)**
 
-The agent system prompt delivered by the user (ChatGPT-assisted):
-> *"You are an AI software engineering team working on a C# .NET 8 WPF project called SkySaver Desktop. You will operate as a multi-agent system with the following roles: Architect Agent – defines structure and design. Backend Agent – implements services, APIs, and data logic. Frontend Agent – implements WPF UI and MVVM. Data Agent – handles models, SQLite, and mock data. QA Agent – checks errors, improves code, and ensures consistency."*
+Introducing the multi-agent system (ChatGPT-assisted specification):
+> *"I want to create some agents for this project for future work, can you help with that? You are an AI software engineering team working on a C# .NET 8 WPF project called SkySaver Desktop. You will operate as a multi-agent system with the following roles: Architect Agent – defines structure and design. Backend Agent – implements services, APIs, and data logic. Frontend Agent – implements WPF UI and MVVM. Data Agent – handles models, SQLite, and mock data. QA Agent – checks errors, improves code, and ensures consistency. Each response must clearly label which agent is speaking. Agents must not overlap responsibilities. Architect Agent must approve changes before implementation. Keep all code consistent with MVVM pattern. Prefer simplicity over overengineering."*
 
-Triggering the full improvement cycle:
+Triggering the first architecture review:
 > *"Let's run the /architect agent and see what can be improved. If needed, give the tasks to other agents."*
 
 After the Architect produced its improvement list:
