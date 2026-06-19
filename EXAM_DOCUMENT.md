@@ -116,7 +116,7 @@ Tested mock mode without any API key. Tested fallback by using an intentionally 
 **Key prompts (actual)**
 
 ChatGPT-drafted prompt delivered to Claude Code:
-> *"Turns out Amadeus no longer provides free API plans so we need to switch to a different service. It would also be good to have mock data instead of relying on a third-party API so the application can be tested. Update the existing SkySaver Desktop WPF application to support BOTH: Aviationstack API mode (online) and Offline mock data mode (no API key required). The goal is that the application works fully even without any external API or account setup. Add a configurable setting and default it to Mock so the application works immediately after cloning/running. If Aviationstack API fails, times out, or returns empty results — automatically fallback to MockFlightService. The app must ALWAYS return results."*
+> *"Turns out Amadeus no longer provides free API plans so we need to switch to a different service. Update the existing SkySaver Desktop WPF application to support BOTH: Aviationstack API mode (online) and Offline mock data mode (no API key required). Add a configurable setting using an enum `DataSourceMode { AviationStack, Mock }` and a singleton `AppConfig` class. Default the mode to `Mock` so the application works immediately after cloning with no setup required. Create an `IFlightService` interface with `SearchFlightsAsync(string origin, string destination, DateTime date)`. Implement `MockFlightService` with at least 30 hardcoded realistic flights and a simulated network delay. Implement `AviationStackFlightService` using `HttpClient`. Create a `FlightServiceFactory` that returns the correct implementation based on `AppConfig.DataSourceMode`. If the Aviationstack API fails, times out, or returns empty results — automatically fall back to `MockFlightService`. The app must ALWAYS return results. Add a UI toggle in Settings and show a label on the results page indicating which data source was used."*
 
 ---
 
@@ -165,7 +165,7 @@ Set a target price above the mock flight price, confirmed the toast notification
 
 **Key prompts (actual)**
 
-> *"At the moment the background monitor holds a direct reference to the flight service. It should use the factory instead and resolve the service on each check, so that if the user switches modes in Settings, the alerts are checked using the new mode too."*
+> *"`AlertMonitorService` currently holds a direct `IFlightService` reference injected at startup. Refactor it to depend on `IFlightServiceFactory` instead and call `_factory.Create()` on each check cycle. This ensures that if the user switches between Mock and Live API in Settings, the background alert checks immediately respect the new mode without requiring an app restart."*
 
 ---
 
